@@ -92,6 +92,9 @@ docker compose restart mc
 ├── data/                 # Datos persistentes (Mundos, mods, configs)
 │   ├── uptime-kuma/      # Datos del panel de estado
 │   └── proxy/            # Datos del gestor de dominios
+├── scripts/              # Script para controlar el Docker
+│   ├── backup.sh         # Script de Backup
+│   └── restore.sh        # Script de Restore
 ├── .env.example          # Plantilla de configuración
 ├── docker-compose.yml    # Definición de los servicios
 └── README.md             # Esta guía
