@@ -1,109 +1,109 @@
-# ⛏️ Cobbleverse Docker Stack
 
-Repositorio con la configuración completa para desplegar un servidor **Cobblemon (Cobbleverse)** profesional en un entorno doméstico o laboratorio. Incluye proxy inverso con dominios personalizados, visor de logs en tiempo real y panel de estado.
+readme_completo.txt
+# 🚀 Minecraft Server Dockerized Stack
 
----
+![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1+-blue?logo=minecraft)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## 📋 Requisitos Previos
-
-### Hardware recomendado
-- **CPU:** mínimo 2 hilos (vCPU) de buen rendimiento
-- **RAM:** **8 GB** mínimo (Cobbleverse es exigente)
-- **Disco:** **30 GB** mínimo (SSD recomendado)
-
-### Software requerido
-Sistema Linux (recomendado **Ubuntu Server 22.04+**):
-- **Docker**
-- **Docker Compose**
-
-**Instalación rápida (Ubuntu):**
-```bash
-sudo apt update && sudo apt install docker.io docker-compose -y
-```
+Una solución completa y **"lista para usar"** para desplegar servidores de Minecraft (Vanilla o con Mods) utilizando **Docker**. Este stack no solo levanta el servidor, sino que incluye herramientas de monitoreo, gestión de logs y un proxy inverso.
 
 ---
 
-## 🚀 Guía de Instalación
+## ✨ Características
 
-### Paso 1: Clonar el repositorio
-```bash
-git clone https://github.com/TU_USUARIO/TU_REPO.git
-cd TU_REPO
-```
+*   **Soporte Universal de Modpacks:** Compatible con CurseForge, Modrinth, FTB, Technic o instalaciones manuales (Forge/Fabric/Quilt).
+*   **Consola Web (Dozzle):** Visualiza los logs del servidor en tiempo real desde tu navegador.
+*   **Panel de Estado (Uptime Kuma):** Monitoriza la disponibilidad y latencia de tu servidor.
+*   **Gestor de Dominios (Nginx Proxy Manager):** Configura dominios (ej: `mc.tuweb.com`) y certificados SSL fácilmente.
+*   **Auto-pausa:** Ahorra recursos del sistema pausando el servidor cuando no hay jugadores conectados.
 
-### Paso 2: Configurar variables de entorno
-Crea el archivo real desde la plantilla y edítalo:
+---
+
+## 🛠️ Inicio Rápido
+
+### 1. Requisitos Previos
+Tener instalado **Docker** y **Docker Compose**.
+
+### 2. Instalación
+
 ```bash
+# 1. Clonar el repositorio
+git clone https://github.com/Xavito06/dockerized-cobbelverse-minecraft-server.git
+cd dockerized-cobbelverse-minecraft-server
+
+# 2. Configurar variables de entorno
 cp .env.example .env
-nano .env
-```
 
-Ajusta al menos:
-- `MC_MEMORY` (RAM del servidor)
-- Dominio (DuckDNS / Cloudflare)
-- Token correspondiente
+# 3. Editar el archivo .env con tus preferencias
+# nano .env (o usa tu editor favorito)
 
-### Paso 3: Iniciar el stack
-```bash
-docker-compose up -d
-```
-
-> ⏳ **Nota:** el primer arranque descargará automáticamente todos los mods de Cobbleverse desde Modrinth.
-
----
-
-## 🌐 Red y Acceso
-
-Configura **port forwarding** en tu router hacia la IP de la VM:
-
-- **25565 TCP/UDP** → Servidor Minecraft
-- **80 TCP** → Servicios web
-- **443 TCP** → Servicios web (HTTPS)
-- **81 TCP** → Panel de administración del proxy
-
-### Servicios disponibles
-- **Panel del Proxy (Nginx):** `http://IP_DE_TU_VM:81`
-  - Usuario: `admin@example.com`
-  - Contraseña: `changeme`
-
-- **Logs en vivo:** `http://logs.tu-dominio.com`
-- **Estado del servidor:** `http://status.tu-dominio.com`
-
----
-
-## 🎮 Cómo unirse al servidor
-
-1. Descarga el **Modrinth Launcher**
-2. Busca e instala el modpack **Cobbleverse**
-3. Añade la dirección del servidor (ej. `miservidor.duckdns.org`)
-
-> ⚠️ Asigna **4–6 GB de RAM** en los ajustes del lanzador de Minecraft.
-
----
-
-## 🛠️ Administración
-
-Ejecuta desde la VM:
-
-- **Dar OP:**
-```bash
-docker exec mc-server mc-send-to-console op TuNombreUsuario
-```
-
-- **Whitelist:**
-```bash
-docker exec mc-server mc-send-to-console whitelist add NombreAmigo
-```
-
-- **Backup manual:**
-```bash
-bash scripts/backup.sh
+# 4. Iniciar el stack
+docker compose up -d
 ```
 
 ---
 
-## ℹ️ Notas finales
+## ⚙️ Configuración (`.env`)
 
-Este proyecto está pensado para facilitar el **auto‑alojamiento de servidores Minecraft** con herramientas de monitoreo y gestión profesionales.
+El archivo `.env` es el corazón del proyecto. Aquí algunos valores clave:
 
-Clona el repositorio, sigue los pasos y tendrás tu servidor Cobblemon listo en minutos. 🚀
+| Variable | Descripción | Ejemplo |
+| :--- | :--- | :--- |
+| `TYPE` | Motor del servidor (FABRIC, FORGE, VANILLA, etc) | `FABRIC` |
+| `MEMORY` | RAM asignada al servidor | `4G` |
+| `CF_API_KEY` | Tu API Key de CurseForge (opcional) | `tu_key` |
+| `MODRINTH_MODPACK` | Slug o URL del pack en Modrinth | `cobblemon-fabric` |
+| `MOTD` | Mensaje de bienvenida en la lista de servers | `¡Hola Docker!` |
+
+---
+
+## 🌐 Puertos y Acceso
+
+Una vez levantado el stack, podrás acceder a las siguientes herramientas:
+
+| Servicio | Puerto | Descripción |
+| :--- | :--- | :--- |
+| **Minecraft** | `25565` | Puerto para conectar al juego. |
+| **Logs** | `8888` | Consola en vivo (vía web). |
+| **Status** | `3001` | Panel de control de Uptime Kuma. |
+| **Proxy** | `81` | Panel de Nginx Proxy Manager (User: `admin@example.com` / Pwd: `changeme`). |
+
+---
+
+## 📦 Gestión de Mods
+
+### Uso de Modpacks Automáticos
+*   **CurseForge:** Cambia `TYPE=AUTO_CURSEFORGE` y añade la URL del pack en `CF_PAGE_URL`.
+*   **Modrinth:** Cambia `TYPE=MODRINTH` y añade el ID/URL en `MODRINTH_MODPACK`.
+
+### Instalación Manual
+Si tienes tus propios archivos `.jar`, simplemente colócalos en la carpeta `./data/mods` que se creará tras el primer inicio y reinicia el contenedor:
+
+```bash
+docker compose restart mc
+```
+
+---
+
+## 📂 Estructura del Proyecto
+
+```text
+├── data/                 # Datos persistentes (Mundos, mods, configs)
+│   ├── uptime-kuma/      # Datos del panel de estado
+│   └── proxy/            # Datos del gestor de dominios
+├── .env.example          # Plantilla de configuración
+├── docker-compose.yml    # Definición de los servicios
+└── README.md             # Esta guía
+```
+
+---
+
+## 🤝 Créditos
+Este proyecto utiliza la excelente imagen base de [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server).
+
+## 📄 Licencia
+Este proyecto está bajo la **Licencia MIT** - mira el archivo `LICENSE` para detalles.
+
+---
+**Desarrollado por Xavito06**
