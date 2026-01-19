@@ -1,0 +1,50 @@
+services:
+  # Servidor de Minecraft (Cobbleverse)
+  mc-server:
+    image: itzg/minecraft-server:latest
+    container_name: mc-server
+    tty: true
+    stdin_open: true
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: ${MC_TYPE:-MODRINTH}
+      MODRINTH_PROJECT: ${MC_PROJECT:-cobbleverse}
+      MEMORY: ${MC_MEMORY:-8G}
+      VERSION: ${MC_VERSION:-1.20.1}
+      ENABLE_QUERY: "true"
+    volumes:
+      - ./data/mc:/data
+    restart: unless-stopped
+
+  # Visor de Logs para tus amigos
+  log-viewer:
+    image: amir20/dozzle:latest
+    container_name: mc-logs
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - DOZZLE_FILTER=name=mc-server
+    restart: unless-stopped
+
+  # Panel de Estado (Uptime Kuma)
+  status-page:
+    image: louislam/uptime-kuma:1
+    container_name: mc-status
+    volumes:
+      - ./data/uptime-kuma:/app/data
+    restart: unless-stopped
+
+  # Gestor de Dominios (Nginx Proxy Manager)
+  proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: mc-proxy
+    ports:
+      - '80:80'
+      - '81:81'   # Panel de control de Nginx
+      - '443:443'
+    volumes:
+      - ./data/proxy:/data
+      - ./data/letsencrypt:/etc/letsencrypt
+    restart: unless-stopped
